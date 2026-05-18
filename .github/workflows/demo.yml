@@ -1,0 +1,21 @@
+name: Demo workflow
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+  push:
+    branches:
+      - main      # main
+      - 'dev-*'   # * indicates any character other than slash: dev-new
+      - 'feat/**' # ** indicates any character including slash: feat/new, feat/new/button
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        run: echo "Repository checkout"
+      - name: Build
+        run: echo "Running build"
