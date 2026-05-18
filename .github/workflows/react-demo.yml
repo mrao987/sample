@@ -13,19 +13,31 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache dependencies            # Caching helps other jobs to reuse the cached dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          # Key is used to retrieve the cache in the future and also to indicate if the cache should be discarded bcos
+          # some dependency changed. 
+          key: deps-node-modules-${{hashFiles('**/package-lock.json')}}
       - name: Install dependencies
         run: npm ci
       - name: Run tests
         run: npm test
 
   build:
-    # needs: test
+    needs: test
     runs-on: ubuntu-latest
     outputs:
       script-file: ${{steps.publish.outputs.filename}}
     steps:
       - name: Code checkout
         uses: actions/checkout@v3
+      - name: Cache dependencies            # Caching helps other jobs to reuse the cached dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{hashFiles('**/package-lock.json')}}
       - name: Install dependencies
         run: npm ci
       - name: Build project
