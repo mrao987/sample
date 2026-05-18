@@ -1,12 +1,23 @@
 name: React Demo Test
 
 # on: [push, workflow_dispatch]
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+env:
+  DB_NAME: demo-db
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Access env var
+        run: |
+          echo "DB Name: ${{env.DB_NAME}}"
       - name: Code checkout
         uses: actions/checkout@v3           # By default, the current repo is checked out via ${{ github.repository}}
       - name: Install NodeJS
